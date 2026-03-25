@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+font-family:Poppins;
+display:flex;
+}
+
+/* 🟡 LEFT PANEL */
+.left{
+width:50%;
+background:linear-gradient(135deg,#facc15,#f59e0b);
+color:#1e293b;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:40px;
+}
+
+/* LOGO */
+.logo{
+font-size:50px;
+margin-bottom:10px;
+animation:pop 0.8s ease;
+}
+
+@keyframes pop{
+0%{transform:scale(0);}
+100%{transform:scale(1);}
+}
+
+/* TITLE */
+.left h1{
+font-size:30px;
+margin-bottom:10px;
+}
+
+/* FEATURES */
+.features{
+margin-top:20px;
+text-align:left;
+font-size:16px;
+line-height:2;
+animation:fadeUp 1.2s ease;
+}
+
+.features p{
+margin:6px 0;
+font-weight:500;
+opacity:0;
+animation:slideIn 0.6s forwards;
+}
+
+/* STAGGER ANIMATION */
+.features p:nth-child(1){animation-delay:0.2s;}
+.features p:nth-child(2){animation-delay:0.4s;}
+.features p:nth-child(3){animation-delay:0.6s;}
+.features p:nth-child(4){animation-delay:0.8s;}
+.features p:nth-child(5){animation-delay:1s;}
+.features p:nth-child(6){animation-delay:1.2s;}
+
+@keyframes slideIn{
+from{opacity:0; transform:translateX(-20px);}
+to{opacity:1; transform:translateX(0);}
+}
+
+@keyframes fadeUp{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1;}
+}
+
+/* RIGHT PANEL */
+.right{
+width:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#0f172a;
+}
+
+/* CARD */
+.card{
+background:#1e293b;
+padding:40px;
+border-radius:14px;
+width:320px;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+text-align:center;
+color:white;
+}
+
+h2{
+margin-bottom:25px;
+}
+
+/* INPUT */
+.input-group{
+position:relative;
+margin-top:18px;
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:8px;
+border:none;
+outline:none;
+background:#334155;
+color:white;
+}
+
+/* LABEL */
+label{
+position:absolute;
+left:12px;
+top:50%;
+transform:translateY(-50%);
+font-size:14px;
+transition:0.3s;
+color:#aaa;
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label{
+top:-8px;
+font-size:12px;
+color:#3b82f6;
+}
+
+/* BUTTON */
+button{
+width:100%;
+padding:12px;
+margin-top:25px;
+border:none;
+border-radius:8px;
+background:#3b82f6;
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#2563eb;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+.left{display:none;}
+.right{width:100%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LEFT -->
+<div class="left">
+
+<div class="logo">🎓</div>
+
+<h1>Smart Attendance System</h1>
+
+<div class="features">
+<p>✔ Easy Attendance Marking</p>
+<p>✔ Real-Time Student Reports</p>
+<p>✔ Subject-wise Analytics</p>
+<p>✔ Monthly Excel Reports</p>
+<p>✔ Low Attendance Alerts</p>
+<p>✔ Secure Login System</p>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<div class="card">
+
+<h2>Login</h2>
+
+<form method="POST">
+
+<div class="input-group">
+<input type="text" name="code" required placeholder=" ">
+<label>User ID</label>
+</div>
+
+<div class="input-group">
+<input type="password" name="password" required placeholder=" ">
+<label>Password</label>
+</div>
+
+<button>Login</button>
+
+</form>
+
+{% if error %}
+<p style="color:red">{{error}}</p>
+{% endif %}
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Report</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+margin:0;
+font-family:Poppins;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+}
+
+.logout-btn{
+background:#ef4444;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.logout-btn:hover{
+transform:scale(1.1);
+}
+
+/* CENTER */
+.container{
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* SEARCH BOX */
+.search-box{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+width:400px;
+margin-top:20px;
+text-align:center;
+backdrop-filter:blur(10px);
+}
+
+input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+margin-bottom:10px;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#38bdf8;
+color:white;
+cursor:pointer;
+}
+
+/* PROFILE CARD */
+.profile{
+background:linear-gradient(135deg,#1f2937,#111827);
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+text-align:center;
+width:400px;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* STATS */
+.stats{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+margin-top:20px;
+text-align:center;
+width:400px;
+}
+
+/* STATUS */
+.good{
+background:#22c55e;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+}
+
+.bad{
+background:#ef4444;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+}
+
+/* GRAPH */
+.chart{
+width:650px;
+margin-top:30px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <h2>📊 Student Report</h2>
+
+    <a href="{{ url_for('logout') }}">
+        <button class="logout-btn">Logout</button>
+    </a>
+</div>
+
+<div class="container">
+
+<!-- SEARCH -->
+<div class="search-box">
+<form method="POST">
+<input name="student_id" placeholder="Enter Student ID">
+<button>Get Report</button>
+</form>
+</div>
+
+{% if error %}
+<p style="color:red">{{error}}</p>
+{% endif %}
+
+<!-- PROFILE -->
+{% if student %}
+<div class="profile">
+<h2>👤 {{student.name}}</h2>
+<p>ID: {{student.student_id}}</p>
+</div>
+{% endif %}
+
+<!-- STATS -->
+{% if total %}
+<div class="stats">
+<h3>Total Classes: {{total}}</h3>
+<h3>Present: {{present}}</h3>
+<h3>Percentage: {{percentage}}%</h3>
+
+{% if percentage >= 75 %}
+<div class="good">✅ Good Attendance</div>
+{% else %}
+<div class="bad">⚠️ Low Attendance</div>
+{% endif %}
+
+</div>
+{% endif %}
+
+<!-- GRAPH -->
+{% if subjects %}
+<div class="chart">
+<canvas id="myChart"></canvas>
+</div>
+{% endif %}
+
+</div>
+
+<script>
+{% if subjects %}
+const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{subjects | tojson}},
+        datasets: [{
+            label: 'Hours Present',
+            data: {{present_counts | tojson}},
+        }]
+    }
+});
+{% endif %}
+</script>
+
+</body>
+</html>
