@@ -1,20 +1,28 @@
 pipeline {
     agent any 
     stages {
-        // We removed the "Get Code" stage because Jenkins does it automatically!
-        
-        stage('Step 1: Build App') {
+        stage('Step 1: Build Image') {
             steps {
-                // This builds your Docker image
-                sh 'docker build -t smart-attendance-img .'
+                // Build with your Docker Hub tag format: username/repository:tag
+                sh 'docker build -t andelikhith/smart-attendance-system:latest .'
             }
         }
-        stage('Step 2: Run App') {
+
+        stage('Step 2: Login & Push') {
             steps {
-                // This stops any old version and starts the new one
+                // Replace 'docker-hub-credentials' with the ID you create in Step 3 below
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                    sh 'docker push andelikhith/smart-attendance-system:latest'
+                }
+            }
+        }
+
+        stage('Step 3: Deploy Locally') {
+            steps {
                 sh 'docker stop attendance-app || true'
                 sh 'docker rm attendance-app || true'
-                sh 'docker run -d --name attendance-app -p 8082:5000 smart-attendance-img'
+                sh 'docker run -d --name attendance-app -p 8082:5000 andelikhith/smart-attendance-system:latest'
             }
         }
     }
